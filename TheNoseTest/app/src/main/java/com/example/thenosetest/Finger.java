@@ -41,7 +41,7 @@ public class Finger {
 
         public void updateFingerPosition() {
 
-            this.xPosition = this.xPosition + 15;
+           
        if(this.direction == 1){
            this.yPosition = this.yPosition - speed;
        }
