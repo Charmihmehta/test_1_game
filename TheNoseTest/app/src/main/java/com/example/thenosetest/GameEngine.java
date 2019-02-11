@@ -41,6 +41,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     boolean moveRight =true;
     boolean moveLeft = false;
     int fingerXPosition;
+    int speed = 10;
 
     //hitbox
     boolean showHitbox = false;
@@ -94,7 +95,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     private void spawnFinger() {
         // put player in middle of screen --> you may have to adjust the Y position
         // depending on your device / emulator
-        finger = new Finger(this.getContext(), (this.screenWidth/2) - 700, (this.screenHeight ) / 2);
+        finger = new Finger(this.getContext(), (this.screenWidth/2) , (this.screenHeight ) / 2);
 
     }
 
@@ -138,9 +139,30 @@ public class GameEngine extends SurfaceView implements Runnable {
     // GAME ENGINE FUNCTIONS
     // - update, draw, setFPS
     // ------------------------------
+ public void updateFinger()
+    {
+        fingerXPosition = this.finger.xPosition;
+        if(moveRight == true) {
+            fingerXPosition = this.finger.xPosition + speed;
+            if(fingerXPosition >=screenWidth*0.85){
+                this.moveLeft = true;
+                this.moveRight = false;
+            }
 
+        }
+         if(this.moveLeft == true){
+            fingerXPosition = this.finger.xPosition - speed;
+            if(fingerXPosition <= screenWidth*0.15){
+                this.moveRight =true;
+                this.moveLeft = false;
+            }
+        }
+
+        finger.setXPosition(fingerXPosition);
+}
     public void updatePositions() {
         // @TODO: Update position of finger
+         updateFinger();
         finger.updateFingerPosition();
 
 
@@ -189,7 +211,7 @@ public class GameEngine extends SurfaceView implements Runnable {
             //reset finger
             startGame();
             finger.direction = -1;
-            finger.setXPosition((this.screenWidth/2) - 700);
+            finger.setXPosition((this.screenWidth/2) );
             finger.setYPosition((this.screenHeight ) / 2);
         }
         else if(finger.getHitbox().intersect(nose.getHitbox2())){
@@ -197,7 +219,7 @@ public class GameEngine extends SurfaceView implements Runnable {
 
             //reset finger
             finger.direction = -1;
-            finger.setXPosition((this.screenWidth/2) - 700);
+            finger.setXPosition((this.screenWidth/2) );
             finger.setYPosition((this.screenHeight ) / 2);
         }
 
@@ -248,6 +270,9 @@ public class GameEngine extends SurfaceView implements Runnable {
                 paintbrush.setStyle(Paint.Style.STROKE);
                 paintbrush.setStrokeWidth(5);
                 canvas.drawRect(nose.getHitbox2(), paintbrush);
+                 //@TODO: boundry
+                canvas.drawLine((float) (this.screenWidth * 0.15),0, (float) (this.screenWidth * 0.15),this.screenHeight,paintbrush);
+                canvas.drawLine((float) (this.screenWidth * 0.85),0, (float) (this.screenWidth * 0.85),this.screenHeight,paintbrush);
             }
             if(this.showHitbox == false)
             {
@@ -265,6 +290,8 @@ public class GameEngine extends SurfaceView implements Runnable {
                 paintbrush.setStyle(Paint.Style.STROKE);
                 paintbrush.setStrokeWidth(5);
                 canvas.drawRect(nose.getHitbox2(), paintbrush);
+                canvas.drawLine((float) (this.screenWidth * 0.15),0, (float) (this.screenWidth * 0.15),this.screenHeight,paintbrush);
+                canvas.drawLine((float) (this.screenWidth * 0.85),0, (float) (this.screenWidth * 0.85),this.screenHeight,paintbrush);
             }
 
             //----------------
