@@ -209,7 +209,7 @@ public class GameEngine extends SurfaceView implements Runnable {
 
             Msg = "you win";
             //reset finger
-            startGame();
+             run();
             finger.direction = -1;
             finger.setXPosition((this.screenWidth/2) );
             finger.setYPosition((this.screenHeight ) / 2);
